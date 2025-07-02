@@ -1,13 +1,12 @@
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Random;
+import java.util.Objects;
 
 public class BankAccount {
-
-    String name;
-    double balance;
-    LocalDateTime opdate;
-    boolean state;
+    private String name;
+    private double balance;
+    private LocalDateTime opdate;
+    private boolean state;
     String number;
 
     public BankAccount(String name) {
@@ -15,10 +14,10 @@ public class BankAccount {
         this.balance = 0;
         this.opdate = LocalDateTime.now();
         this.state = true;
-        this.number = AccountNumber();
+        this.number = generateAccountNumber();
     }
 
-    private String AccountNumber() {
+    private String generateAccountNumber() {
         Random random = new Random();
         StringBuilder sb = new StringBuilder(8);
         for (int i = 0; i < 8; i++) {
@@ -27,16 +26,36 @@ public class BankAccount {
         return sb.toString();
     }
 
+    public boolean deposit(double amount) {
+        if (!state || amount <= 0) {
+            return false;
+        }
+        balance += amount;
+        return true;
+    }
+
+    public boolean withdraw(double amount) {
+        if (!state || amount <= 0 || amount > balance) {
+            return false;
+        }
+        balance -= amount;
+        return true;
+    }
+
+    public boolean transfer(BankAccount otherAccount, double amount) {
+        if (!state || otherAccount == null || !otherAccount.state || 
+            amount <= 0 || amount > balance) {
+            return false;
+        }
+        this.balance -= amount;
+        otherAccount.balance += amount;
+        return true;
+    }
 
     @Override
     public String toString() {
-        return "BankAccount{" +
-                "name='" + name + '\'' +
-                ", balance=" + balance +
-                ", opdate=" + opdate +
-                ", state=" + (state ? "active" : "blocked") +
-                ", number='" + number + '\'' +
-                '}';
+        return String.format("Счет №%s, Владелец: %s, Баланс: %.2f₽", 
+                number, name, balance);
     }
 
     @Override
@@ -52,32 +71,7 @@ public class BankAccount {
         return Objects.hash(number);
     }
 
-    public boolean deposit(double amount) {
-        if (!state || amount <= 0) {
-            return false; }
-        balance += amount;
-        return true; 
-    }
-
-    public boolean withdraw(double amount) {
-        if (!state || amount <= 0 || amount > balance) {
-            return false; 
-        }
-        balance -= amount;
-        return true; 
-    }
-
-    public boolean transfer(BankAccount otherAccount, double amount) {
-        if (!state || otherAccount == null || !otherAccount.state || 
-            amount <= 0 || amount > balance) {
-            return false; 
-        }
-        
-        this.balance -= amount;
-        otherAccount.balance += amount;
-        return true;
-    }
-
+    // Геттеры
     public String getName() {
         return name;
     }
@@ -94,8 +88,15 @@ public class BankAccount {
         return state;
     }
 
-    public void setState(boolean newState) {
-        this.state = newState;
+    public String getNumber() {
+        return number;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
+    }
 }
