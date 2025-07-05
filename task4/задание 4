@@ -1,0 +1,33 @@
+Вывод программ:
+
+Printable
+→ Hello from lambda!
+
+Проверка строки (Predicate)
+
+"hello" → true (не null)
+"" → false (пустая)
+null → false
+
+Строка начинается с J/N и заканчивается на A
+
+"JavaA" → true
+"NovaA" → true
+"PythonA" → false
+
+HeavyBox (Consumer)
+→ Отправляем ящик с весом 50
+→ Отгрузили ящик с весом 50
+
+Проверка числа (Function)
+
+5 → Положительное число
+-3 → Отрицательное число
+0 → Ноль
+
+Случайное число (Supplier)
+→ 7 (пример, 0-10)
+
+Аннотация @DeprecatedEx
+→ Внимание: класс 'OldClass' устарел. Альтернатива: 'Use NewClass instead'
+→ Внимание: метод 'oldMethod' устарел. Альтернатива: 'Use newMethod() instead'
